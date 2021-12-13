@@ -4,13 +4,10 @@ import { applyDrag, generateItems } from "../../utils";
 import Footer from "../Footer";
 // import Header from "../Header";
 import { CardScenes } from "./styles";
-
-const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
-
 const columnNames = ["Lorem", "Ipsum", "Consectetur", "Eiusmod"];
-
 const cardColors = [
   "azure",
   "beige",
@@ -27,11 +24,9 @@ const pickColor = () => {
   let rand = Math.floor(Math.random() * 10);
   return cardColors[rand];
 };
-
 class Cards extends Component {
   constructor() {
     super();
-
     this.onColumnDrop = this.onColumnDrop.bind(this);
     this.onCardDrop = this.onCardDrop.bind(this);
     this.getCardPayload = this.getCardPayload.bind(this);
@@ -62,7 +57,6 @@ class Cards extends Component {
       }
     };
   }
-
   render() {
     return (
       <CardScenes>
@@ -102,10 +96,10 @@ class Cards extends Component {
                       console.log("drag leave:", column.id);
                     }}
                     onDropReady={p => console.log('Drop ready: ', p)}
-                    dropPlaceholder={{                      
+                    dropPlaceholder={{
                       animationDuration: 150,
                       showOnTop: true,
-                      className: 'drop-preview' 
+                      className: 'drop-preview'
                     }}
                     dropPlaceholderAnimationDuration={200}
                   >
@@ -113,7 +107,19 @@ class Cards extends Component {
                       return (
                         <Draggable key={card.id}>
                           <div {...card.props}>
-                            <p>{card.data}</p>
+                            {/* <p> {card.data} </p> */}
+                            <textarea style={{
+                              resize: 'none',
+                              fontSize: '28px',
+                              width: '100%',
+                              height: '300px',
+                              overflow: 'hidden',
+                              outline: 'none',
+                              border: 'none',
+                              backgroundColor: 'transparent'
+                            }}>
+                              {card.data}
+                            </textarea>
                           </div>
                         </Draggable>
                       );
@@ -128,13 +134,11 @@ class Cards extends Component {
       </CardScenes>
     );
   }
-
   getCardPayload(columnId, index) {
     return this.state.scene.children.filter(p => p.id === columnId)[0].children[
       index
     ];
   }
-
   onColumnDrop(dropResult) {
     const scene = Object.assign({}, this.state.scene);
     scene.children = applyDrag(scene.children, dropResult);
@@ -142,22 +146,18 @@ class Cards extends Component {
       scene
     });
   }
-
   onCardDrop(columnId, dropResult) {
     if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
       const scene = Object.assign({}, this.state.scene);
       const column = scene.children.filter(p => p.id === columnId)[0];
       const columnIndex = scene.children.indexOf(column);
-
       const newColumn = Object.assign({}, column);
       newColumn.children = applyDrag(newColumn.children, dropResult);
       scene.children.splice(columnIndex, 1, newColumn);
-
       this.setState({
         scene
       });
     }
   }
 }
-
 export default Cards;
